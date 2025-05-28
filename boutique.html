@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acheter CB</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    let cart = [];
+
+    function checkLogin() {
+      const user = localStorage.getItem("loggedUser");
+      if (!user) {
+        alert("Veuillez vous connecter.");
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("user-info").textContent = "Connecté en tant que : " + user;
+      }
+    }
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const list = document.getElementById("cart-items");
+      const total = document.getElementById("total");
+      list.innerHTML = "";
+      let sum = 0;
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - ${item.price}€`;
+        list.appendChild(li);
+        sum += item.price;
+      });
+      total.textContent = `Total: ${sum}€`;
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Votre panier est vide.");
+        return;
+      }
+      alert("Achat simulé. Merci pour votre commande !");
+      cart = [];
+      updateCart();
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedUser");
+      window.location.href = "index.html";
+    }
+
+    window.onload = checkLogin;
+  </script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+  <header class="bg-yellow-400 p-6 text-center shadow-lg">
+    <h1 class="text-3xl font-bold">Boutique CB Exclusive</h1>
+    <p class="text-lg">Offres spéciales sur les CB haut de gamme</p>
+    <p id="user-info" class="mt-2 text-sm font-medium"></p>
+    <button onclick="logout()" class="mt-2 text-sm underline text-red-600">Se déconnecter</button>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold mb-2">CB 2000€</h2>
+      <p class="text-green-600 text-xl font-semibold">Prix : 300€</p>
+      <button onclick="addToCart('CB 2000€', 300)" class="mt-4 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 rounded-lg font-semibold">Ajouter au panier</button>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold mb-2">CB 10000€</h2>
+      <p class="text-green-600 text-xl font-semibold">Prix : 500€</p>
+      <button onclick="addToCart('CB 10000€', 500)" class="mt-4 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 rounded-lg font-semibold">Ajouter au panier</button>
+    </div>
+  </main>
+
+  <section class="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md mb-8">
+    <h3 class="text-xl font-bold mb-4">🛒 Panier</h3>
+    <ul id="cart-items" class="list-disc list-inside mb-4"></ul>
+    <p id="total" class="text-lg font-semibold">Total: 0€</p>
+    <button onclick="checkout()" class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">Acheter</button>
+  </section>
+</body>
+</html>
